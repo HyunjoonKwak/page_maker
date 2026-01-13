@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product_name }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fff;
+            max-width: 860px;
+            margin: 0 auto;
+        }
+
+        .section {
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        /* 히어로 섹션 */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 40px;
+        }
+
+        .hero h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .hero .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        /* 상품 이미지 */
+        .product-images {
+            background: #f8f9fa;
+        }
+
+        .product-images img {
+            max-width: 100%;
+            height: auto;
+            margin: 10px 0;
+        }
+
+        /* 특징 섹션 */
+        .features {
+            background: #fff;
+        }
+
+        .features h2 {
+            font-size: 1.8em;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .features .content {
+            font-size: 1.1em;
+            color: #555;
+            white-space: pre-line;
+        }
+
+        /* 혜택 섹션 */
+        .benefits {
+            background: #f0f4ff;
+        }
+
+        .benefits h2 {
+            font-size: 1.8em;
+            margin-bottom: 30px;
+            color: #4a5568;
+        }
+
+        .benefits .content {
+            font-size: 1.1em;
+            color: #555;
+            white-space: pre-line;
+        }
+
+        /* 상세 정보 */
+        .details {
+            background: #fff;
+        }
+
+        .details h2 {
+            font-size: 1.8em;
+            margin-bottom: 30px;
+        }
+
+        .details .content {
+            font-size: 1em;
+            color: #666;
+            white-space: pre-line;
+            text-align: left;
+        }
+
+        /* CTA 섹션 */
+        .cta {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            color: white;
+            padding: 60px 40px;
+        }
+
+        .cta h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .cta .content {
+            font-size: 1.2em;
+            white-space: pre-line;
+        }
+
+        /* 가격 정보 */
+        .price-info {
+            background: #333;
+            color: white;
+            padding: 40px;
+        }
+
+        .price-info .price {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #feca57;
+        }
+    </style>
+</head>
+<body>
+    <!-- 히어로 섹션 -->
+    <section class="section hero">
+        <h1>{{ product_name }}</h1>
+        <p class="subtitle">{{ sections.hero }}</p>
+    </section>
+
+    <!-- 상품 이미지 -->
+    {% if product_images %}
+    <section class="section product-images">
+        {% for image in product_images %}
+        <img src="{{ image }}" alt="{{ product_name }}">
+        {% endfor %}
+    </section>
+    {% endif %}
+
+    <!-- 특징 섹션 -->
+    <section class="section features">
+        <h2>✨ 제품 특징</h2>
+        <div class="content">{{ sections.features }}</div>
+    </section>
+
+    <!-- 혜택 섹션 -->
+    <section class="section benefits">
+        <h2>🎁 고객 혜택</h2>
+        <div class="content">{{ sections.benefits }}</div>
+    </section>
+
+    <!-- 상세 정보 -->
+    <section class="section details">
+        <h2>📋 상세 정보</h2>
+        <div class="content">{{ sections.details }}</div>
+    </section>
+
+    <!-- CTA 섹션 -->
+    <section class="section cta">
+        <h2>🛒 지금 바로 구매하세요!</h2>
+        <div class="content">{{ sections.cta }}</div>
+    </section>
+
+    <!-- 가격 정보 -->
+    {% if price_info %}
+    <section class="section price-info">
+        <div class="price">{{ price_info }}</div>
+    </section>
+    {% endif %}
+</body>
+</html>

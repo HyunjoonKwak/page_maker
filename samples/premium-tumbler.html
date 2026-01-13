@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>프리미엄 보온 텀블러 - 상세페이지</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #ffffff;
+      color: #1a1a1a;
+      line-height: 1.6;
+    }
+
+    .detail-page {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    /* 히어로 섹션 */
+    .hero {
+      position: relative;
+      height: 700px;
+      background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 40px;
+    }
+
+    .hero-badge {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-size: 14px;
+      color: #a8dadc;
+      margin-bottom: 30px;
+      letter-spacing: 2px;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+    }
+
+    .hero-subtitle {
+      font-size: 20px;
+      color: #a8dadc;
+      margin-bottom: 40px;
+    }
+
+    .hero-image {
+      width: 300px;
+      height: 400px;
+      background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #b2bec3;
+      font-size: 14px;
+    }
+
+    /* 핵심 포인트 섹션 */
+    .key-points {
+      background: #f8f9fa;
+      padding: 80px 40px;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #1a1a1a;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      font-size: 16px;
+      color: #6c757d;
+      margin-bottom: 60px;
+    }
+
+    .points-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+
+    .point-card {
+      background: #ffffff;
+      padding: 40px 30px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .point-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      margin: 0 auto 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+    }
+
+    .point-card h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #1a1a1a;
+    }
+
+    .point-card p {
+      font-size: 14px;
+      color: #6c757d;
+      line-height: 1.7;
+    }
+
+    /* 상세 설명 섹션 */
+    .feature-section {
+      padding: 100px 40px;
+      display: flex;
+      align-items: center;
+      gap: 60px;
+    }
+
+    .feature-section.reverse {
+      flex-direction: row-reverse;
+      background: #f8f9fa;
+    }
+
+    .feature-image {
+      flex: 1;
+      height: 500px;
+      background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #868e96;
+      font-size: 14px;
+    }
+
+    .feature-content {
+      flex: 1;
+    }
+
+    .feature-label {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 6px 16px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+
+    .feature-content h2 {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      line-height: 1.3;
+      color: #1a1a1a;
+    }
+
+    .feature-content p {
+      font-size: 16px;
+      color: #495057;
+      line-height: 1.8;
+      margin-bottom: 30px;
+    }
+
+    .feature-list {
+      list-style: none;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 15px;
+      color: #495057;
+      margin-bottom: 12px;
+    }
+
+    .feature-list li::before {
+      content: "✓";
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      background: #d4edda;
+      color: #28a745;
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    /* 스펙 섹션 */
+    .specs-section {
+      background: #1a1a2e;
+      padding: 80px 40px;
+    }
+
+    .specs-section .section-title {
+      color: #ffffff;
+    }
+
+    .specs-section .section-subtitle {
+      color: #a8dadc;
+    }
+
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .spec-item {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 16px;
+      text-align: center;
+    }
+
+    .spec-value {
+      font-size: 36px;
+      font-weight: 700;
+      color: #a8dadc;
+      margin-bottom: 8px;
+    }
+
+    .spec-label {
+      font-size: 14px;
+      color: #6c757d;
+    }
+
+    /* 리뷰 섹션 */
+    .reviews-section {
+      padding: 80px 40px;
+      background: #ffffff;
+    }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+    }
+
+    .review-card {
+      background: #f8f9fa;
+      padding: 30px;
+      border-radius: 16px;
+    }
+
+    .review-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .review-avatar {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+    }
+
+    .review-info h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .review-stars {
+      color: #ffc107;
+      font-size: 14px;
+    }
+
+    .review-text {
+      font-size: 15px;
+      color: #495057;
+      line-height: 1.7;
+    }
+
+    /* CTA 섹션 */
+    .cta-section {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 80px 40px;
+      text-align: center;
+    }
+
+    .cta-section h2 {
+      font-size: 36px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 16px;
+    }
+
+    .cta-section p {
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 40px;
+    }
+
+    .cta-price {
+      margin-bottom: 30px;
+    }
+
+    .original-price {
+      font-size: 20px;
+      color: rgba(255, 255, 255, 0.5);
+      text-decoration: line-through;
+      margin-right: 16px;
+    }
+
+    .sale-price {
+      font-size: 48px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: #ffffff;
+      color: #764ba2;
+      padding: 20px 60px;
+      border-radius: 50px;
+      font-size: 18px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    /* 푸터 정보 */
+    .info-section {
+      background: #f8f9fa;
+      padding: 60px 40px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+    }
+
+    .info-item h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid #667eea;
+    }
+
+    .info-item p {
+      font-size: 14px;
+      color: #6c757d;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="detail-page">
+
+    <!-- 히어로 섹션 -->
+    <section class="hero">
+      <span class="hero-badge">2024 NEW ARRIVAL</span>
+      <h1>프리미엄 보온 텀블러</h1>
+      <p class="hero-subtitle">24시간 보온 · 48시간 보냉 · 친환경 소재</p>
+      <div class="hero-image">제품 이미지 영역 (300x400)</div>
+    </section>
+
+    <!-- 핵심 포인트 -->
+    <section class="key-points">
+      <h2 class="section-title">왜 이 텀블러인가요?</h2>
+      <p class="section-subtitle">일상을 바꾸는 세 가지 핵심 가치</p>
+
+      <div class="points-grid">
+        <div class="point-card">
+          <div class="point-icon">🌡️</div>
+          <h3>완벽한 온도 유지</h3>
+          <p>진공 이중벽 기술로 뜨거운 음료는 24시간, 차가운 음료는 48시간 동안 온도를 유지합니다.</p>
+        </div>
+        <div class="point-card">
+          <div class="point-icon">🌿</div>
+          <h3>친환경 소재</h3>
+          <p>BPA-Free 스테인리스 스틸 304 사용. 환경과 건강을 동시에 생각한 프리미엄 소재입니다.</p>
+        </div>
+        <div class="point-card">
+          <div class="point-icon">💧</div>
+          <h3>누수 방지 설계</h3>
+          <p>특허받은 트위스트 락 시스템으로 가방 속에서도 완벽한 밀폐력을 보장합니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 상세 설명 1 -->
+    <section class="feature-section">
+      <div class="feature-image">상세 이미지 1 (제품 클로즈업)</div>
+      <div class="feature-content">
+        <span class="feature-label">TECHNOLOGY</span>
+        <h2>진공 이중벽 단열<br>기술의 정점</h2>
+        <p>항공우주 산업에서 영감을 받은 진공 단열 기술을 적용했습니다. 외부 온도와 상관없이 내부 음료의 온도를 완벽하게 보존합니다.</p>
+        <ul class="feature-list">
+          <li>진공 이중벽 구조로 열 전달 차단</li>
+          <li>구리 코팅 내벽으로 복사열 반사</li>
+          <li>의료용 등급 스테인리스 스틸 사용</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 상세 설명 2 -->
+    <section class="feature-section reverse">
+      <div class="feature-image">상세 이미지 2 (사용 장면)</div>
+      <div class="feature-content">
+        <span class="feature-label">DESIGN</span>
+        <h2>어디서든 돋보이는<br>미니멀 디자인</h2>
+        <p>군더더기 없는 깔끔한 디자인으로 오피스, 카페, 야외 어디서든 자연스럽게 어울립니다. 손에 쥐었을 때의 그립감까지 고려한 인체공학적 설계.</p>
+        <ul class="feature-list">
+          <li>매트 피니시로 지문 자국 최소화</li>
+          <li>슬림한 디자인으로 차량 컵홀더 호환</li>
+          <li>원핸드 오픈 시스템</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 스펙 섹션 -->
+    <section class="specs-section">
+      <h2 class="section-title">제품 스펙</h2>
+      <p class="section-subtitle">숫자로 보는 프리미엄 품질</p>
+
+      <div class="specs-grid">
+        <div class="spec-item">
+          <div class="spec-value">500ml</div>
+          <div class="spec-label">넉넉한 용량</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-value">280g</div>
+          <div class="spec-label">가벼운 무게</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-value">24h</div>
+          <div class="spec-label">보온 시간</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-value">48h</div>
+          <div class="spec-label">보냉 시간</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 리뷰 섹션 -->
+    <section class="reviews-section">
+      <h2 class="section-title">실제 사용 후기</h2>
+      <p class="section-subtitle">구매 고객님들의 솔직한 리뷰</p>
+
+      <div class="reviews-grid">
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-avatar">김</div>
+            <div class="review-info">
+              <h4>김서연님</h4>
+              <div class="review-stars">★★★★★</div>
+            </div>
+          </div>
+          <p class="review-text">"출근길에 담아간 커피가 점심때까지 따뜻해요. 디자인도 예쁘고 손에 딱 맞아서 매일 들고 다녀요. 정말 만족합니다!"</p>
+        </div>
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-avatar">이</div>
+            <div class="review-info">
+              <h4>이준호님</h4>
+              <div class="review-stars">★★★★★</div>
+            </div>
+          </div>
+          <p class="review-text">"캠핑 갈 때 얼음 넣어가면 다음날까지 안 녹아요. 가성비 최고입니다. 색상별로 하나씩 더 살 예정이에요."</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA 섹션 -->
+    <section class="cta-section">
+      <h2>지금 바로 시작하세요</h2>
+      <p>오늘 주문하시면 무료배송 + 전용 파우치 증정</p>
+      <div class="cta-price">
+        <span class="original-price">45,000원</span>
+        <span class="sale-price">29,900원</span>
+      </div>
+      <a href="#" class="cta-button">구매하기</a>
+    </section>
+
+    <!-- 푸터 정보 -->
+    <section class="info-section">
+      <div class="info-grid">
+        <div class="info-item">
+          <h4>배송 안내</h4>
+          <p>평일 오후 2시 이전 주문 시 당일 출고<br>제주 및 도서산간 지역 추가 배송비 발생</p>
+        </div>
+        <div class="info-item">
+          <h4>교환/반품</h4>
+          <p>수령 후 7일 이내 교환/반품 가능<br>단순 변심 시 왕복 배송비 고객 부담</p>
+        </div>
+        <div class="info-item">
+          <h4>A/S 안내</h4>
+          <p>1년 무상 A/S 보장<br>고객센터: 1588-0000 (평일 09-18시)</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+# Web Framework
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+python-multipart>=0.0.9
+
+# AI APIs
+anthropic>=0.50.0
+openai>=1.60.0
+
+# Image Processing
+pillow>=10.4.0
+playwright>=1.49.0
+
+# Web Scraping & Analysis
+beautifulsoup4>=4.12.3
+httpx>=0.28.0
+colorthief>=0.2.1
+
+# Database
+sqlalchemy>=2.0.36
+aiosqlite>=0.20.0
+
+# Template
+jinja2>=3.1.4
+
+# Utilities
+python-dotenv>=1.0.1
+pydantic>=2.10.0
+pydantic-settings>=2.6.0
