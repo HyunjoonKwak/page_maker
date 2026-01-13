@@ -113,6 +113,11 @@ class TemplateResponse(TemplateBase):
         from_attributes = True
 
 
+class TemplateDetailResponse(TemplateResponse):
+    """템플릿 상세 응답 (HTML 포함)"""
+    html_template: str
+
+
 # === 이미지 생성 관련 ===
 
 class BackgroundGenerateRequest(BaseModel):

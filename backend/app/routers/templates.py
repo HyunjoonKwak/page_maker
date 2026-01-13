@@ -4,7 +4,7 @@ from sqlalchemy import select
 from typing import List
 
 from app.models.database import get_db, Template
-from app.models.schemas import TemplateCreate, TemplateResponse
+from app.models.schemas import TemplateCreate, TemplateResponse, TemplateDetailResponse
 
 router = APIRouter()
 
@@ -25,12 +25,12 @@ async def list_templates(
     return templates
 
 
-@router.get("/{template_id}", response_model=TemplateResponse)
+@router.get("/{template_id}", response_model=TemplateDetailResponse)
 async def get_template(
     template_id: int,
     db: AsyncSession = Depends(get_db),
 ):
-    """템플릿 상세 조회"""
+    """템플릿 상세 조회 (HTML 포함)"""
     result = await db.execute(select(Template).where(Template.id == template_id))
     template = result.scalar_one_or_none()
 
