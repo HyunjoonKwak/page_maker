@@ -1,7 +1,9 @@
 import os
 from openai import OpenAI
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# API 키가 없으면 None으로 설정 (나중에 사용 시 에러 처리)
+_api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=_api_key) if _api_key else None
 
 
 async def generate_background_image(

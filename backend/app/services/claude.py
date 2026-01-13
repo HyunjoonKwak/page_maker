@@ -5,7 +5,9 @@ from typing import Optional, Dict, Any
 
 from app.models.schemas import QuestionResponse
 
-client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+# API 키가 없으면 None으로 설정 (나중에 사용 시 에러 처리)
+_api_key = os.getenv("ANTHROPIC_API_KEY")
+client = anthropic.Anthropic(api_key=_api_key) if _api_key else None
 
 
 async def generate_followup_question(context: Dict[str, Any]) -> Optional[QuestionResponse]:

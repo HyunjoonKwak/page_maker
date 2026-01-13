@@ -39,7 +39,6 @@ class QuestionResponse(BaseModel):
 
 class AnswerRequest(BaseModel):
     """사용자 답변"""
-    session_id: int
     field_name: str
     value: Any
 

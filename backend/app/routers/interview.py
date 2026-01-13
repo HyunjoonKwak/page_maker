@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.orm.attributes import flag_modified
 from typing import Dict, Any
 
 from app.models.database import get_db, Session
@@ -150,10 +151,11 @@ async def submit_answer(
     if not session:
         raise HTTPException(status_code=404, detail="세션을 찾을 수 없습니다")
 
-    # 컨텍스트 업데이트
-    context = session.context or {}
+    # 컨텍스트 업데이트 (새 딕셔너리로 복사하여 변경 감지)
+    context = dict(session.context or {})
     context[request.field_name] = request.value
     session.context = context
+    flag_modified(session, "context")  # SQLAlchemy에 JSON 필드 변경 알림
 
     await db.commit()
 
