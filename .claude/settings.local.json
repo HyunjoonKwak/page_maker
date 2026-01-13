@@ -5,7 +5,12 @@
       "WebSearch",
       "Bash(open:*)",
       "Bash(git add:*)",
-      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat: 네이버 스마트스토어 상세페이지 자동화 도구 초기 구현\n\n- FastAPI 백엔드: 문답 시스템, 상세페이지 생성, 참고페이지 분석 API\n- Next.js 프론트엔드: shadcn/ui 컴포넌트 설정\n- Claude API + DALL-E 연동 서비스\n- Docker Compose 배포 설정\n- 샘플 상세페이지 HTML 템플릿 추가\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat: 네이버 스마트스토어 상세페이지 자동화 도구 초기 구현\n\n- FastAPI 백엔드: 문답 시스템, 상세페이지 생성, 참고페이지 분석 API\n- Next.js 프론트엔드: shadcn/ui 컴포넌트 설정\n- Claude API + DALL-E 연동 서비스\n- Docker Compose 배포 설정\n- 샘플 상세페이지 HTML 템플릿 추가\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(cd:*)",
+      "Bash(pnpm dlx:*)",
+      "Bash(pnpm build:*)",
+      "Bash(curl:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat: 프론트엔드 UI 전체 구현 \\(토스 스타일\\)\n\n- 랜딩 페이지: HeroSection, FeatureSection, HowItWorksSection\n- 문답 페이지: 채팅형 UI, 진행률 바, 다양한 입력 컴포넌트\n- 결과 페이지: HTML 미리보기, 코드 복사, 다운로드 기능\n- 템플릿 갤러리: 카테고리 필터, 카드 그리드, 미리보기 다이얼로그\n- 상태 관리: Zustand 스토어 \\(interview, generation, template\\)\n- API 연동: React Query 훅, API 클라이언트, 타입 정의\n- 레이아웃: Header, Footer, QueryProvider 설정\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
     ]
   }
 }
