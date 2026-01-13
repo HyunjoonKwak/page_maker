@@ -1,0 +1,80 @@
+version: '3.8'
+
+# GHCR 이미지를 사용하는 프로덕션 배포용
+# 사용법: GHCR_USERNAME=xxx IMAGE_TAG=latest docker-compose -f docker-compose.prod.yml up -d
+
+services:
+  # PostgreSQL 데이터베이스
+  db:
+    image: postgres:15-alpine
+    container_name: detailpage-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-detailpage}
+      POSTGRES_USER: ${POSTGRES_USER:-admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Database password required}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - detailpage-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-admin} -d ${POSTGRES_DB:-detailpage}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # FastAPI 백엔드 (GHCR 이미지)
+  backend:
+    image: ghcr.io/${GHCR_USERNAME}/detailpage-backend:${IMAGE_TAG:-latest}
+    container_name: detailpage-backend
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-admin}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-detailpage}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+    volumes:
+      - backend_data:/app/data
+      - generated_images:/app/generated_images
+    networks:
+      - detailpage-network
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # Next.js 프론트엔드 (GHCR 이미지)
+  frontend:
+    image: ghcr.io/${GHCR_USERNAME}/detailpage-frontend:${IMAGE_TAG:-latest}
+    container_name: detailpage-frontend
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://backend:8000}
+    networks:
+      - detailpage-network
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  # Nginx 리버스 프록시
+  nginx:
+    image: nginx:alpine
+    container_name: detailpage-nginx
+    ports:
+      - "${HTTP_PORT:-8080}:80"
+      - "${HTTPS_PORT:-8443}:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    networks:
+      - detailpage-network
+    depends_on:
+      - frontend
+      - backend
+    restart: unless-stopped
+
+networks:
+  detailpage-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  backend_data:
+  generated_images:
