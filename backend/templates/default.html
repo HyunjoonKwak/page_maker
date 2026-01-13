@@ -2,8 +2,8 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ product_name }}</title>
+    <meta name="viewport" content="width=860">
+    <title>{{ product_name }} - 상세페이지</title>
     <style>
         * {
             margin: 0;
@@ -12,175 +12,333 @@
         }
 
         body {
-            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+            background: #ffffff;
+            color: #191F28;
             line-height: 1.6;
-            color: #333;
-            background: #fff;
-            max-width: 860px;
+            width: 860px;
             margin: 0 auto;
-        }
-
-        .section {
-            padding: 60px 40px;
-            text-align: center;
         }
 
         /* 히어로 섹션 */
         .hero {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
             padding: 80px 40px;
+            text-align: center;
+            color: white;
         }
 
         .hero h1 {
-            font-size: 2.5em;
+            font-size: 42px;
             font-weight: 700;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
         }
 
         .hero .subtitle {
-            font-size: 1.2em;
+            font-size: 20px;
             opacity: 0.9;
+            margin-bottom: 24px;
         }
 
-        /* 상품 이미지 */
-        .product-images {
-            background: #f8f9fa;
+        .hero .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 500;
         }
 
-        .product-images img {
-            max-width: 100%;
-            height: auto;
-            margin: 10px 0;
+        /* 섹션 공통 */
+        .section {
+            padding: 60px 40px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 40px;
+            color: #191F28;
+        }
+
+        .section-subtitle {
+            font-size: 16px;
+            color: #6B7684;
+            text-align: center;
+            margin-top: -30px;
+            margin-bottom: 40px;
         }
 
         /* 특징 섹션 */
         .features {
-            background: #fff;
+            background: #F8F9FA;
         }
 
-        .features h2 {
-            font-size: 1.8em;
-            margin-bottom: 30px;
-            color: #333;
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
         }
 
-        .features .content {
-            font-size: 1.1em;
-            color: #555;
-            white-space: pre-line;
+        .feature-card {
+            background: white;
+            padding: 32px 24px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
 
-        /* 혜택 섹션 */
-        .benefits {
-            background: #f0f4ff;
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 28px;
         }
 
-        .benefits h2 {
-            font-size: 1.8em;
-            margin-bottom: 30px;
-            color: #4a5568;
+        .feature-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #191F28;
         }
 
-        .benefits .content {
-            font-size: 1.1em;
-            color: #555;
-            white-space: pre-line;
+        .feature-card p {
+            font-size: 14px;
+            color: #6B7684;
+            line-height: 1.5;
         }
 
-        /* 상세 정보 */
-        .details {
-            background: #fff;
+        /* USP 섹션 */
+        .usp {
+            background: white;
         }
 
-        .details h2 {
-            font-size: 1.8em;
-            margin-bottom: 30px;
+        .usp-content {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+            border-radius: 24px;
+            padding: 48px;
+            text-align: center;
         }
 
-        .details .content {
-            font-size: 1em;
-            color: #666;
-            white-space: pre-line;
-            text-align: left;
+        .usp-content h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #191F28;
+        }
+
+        .usp-content p {
+            font-size: 16px;
+            color: #4E5968;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* 타겟 고객 섹션 */
+        .target {
+            background: #F8F9FA;
+        }
+
+        .target-box {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .target-box h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #191F28;
+        }
+
+        .target-list {
+            list-style: none;
+        }
+
+        .target-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #F2F4F6;
+            font-size: 16px;
+            color: #4E5968;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .target-list li:last-child {
+            border-bottom: none;
+        }
+
+        .target-list li::before {
+            content: "✓";
+            color: #667eea;
+            font-weight: 700;
+        }
+
+        /* 가격 섹션 */
+        .pricing {
+            background: white;
+            text-align: center;
+        }
+
+        .price-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 24px;
+            padding: 48px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .price-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .price-amount {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .price-promo {
+            background: rgba(255,255,255,0.2);
+            padding: 12px 24px;
+            border-radius: 100px;
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 500;
         }
 
         /* CTA 섹션 */
         .cta {
-            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            background: #191F28;
             color: white;
-            padding: 60px 40px;
+            text-align: center;
+            padding: 80px 40px;
         }
 
         .cta h2 {
-            font-size: 2em;
-            margin-bottom: 20px;
-        }
-
-        .cta .content {
-            font-size: 1.2em;
-            white-space: pre-line;
-        }
-
-        /* 가격 정보 */
-        .price-info {
-            background: #333;
-            color: white;
-            padding: 40px;
-        }
-
-        .price-info .price {
-            font-size: 2.5em;
+            font-size: 32px;
             font-weight: 700;
-            color: #feca57;
+            margin-bottom: 16px;
+        }
+
+        .cta p {
+            font-size: 16px;
+            opacity: 0.8;
+            margin-bottom: 32px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 48px;
+            border-radius: 100px;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* 푸터 */
+        .footer {
+            background: #F8F9FA;
+            padding: 40px;
+            text-align: center;
+            font-size: 12px;
+            color: #8B95A1;
         }
     </style>
 </head>
 <body>
     <!-- 히어로 섹션 -->
-    <section class="section hero">
+    <section class="hero">
+        <span class="badge">{{ category }}</span>
         <h1>{{ product_name }}</h1>
-        <p class="subtitle">{{ sections.hero }}</p>
+        <p class="subtitle">{{ sections.hero if sections.hero else usp }}</p>
     </section>
-
-    <!-- 상품 이미지 -->
-    {% if product_images %}
-    <section class="section product-images">
-        {% for image in product_images %}
-        <img src="{{ image }}" alt="{{ product_name }}">
-        {% endfor %}
-    </section>
-    {% endif %}
 
     <!-- 특징 섹션 -->
     <section class="section features">
-        <h2>✨ 제품 특징</h2>
-        <div class="content">{{ sections.features }}</div>
+        <h2 class="section-title">주요 특징</h2>
+        <p class="section-subtitle">{{ product_name }}만의 특별함</p>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">✨</div>
+                <h3>프리미엄 품질</h3>
+                <p>최고급 원료로 만든 믿을 수 있는 품질</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>검증된 효과</h3>
+                <p>수많은 고객들이 인정한 만족도</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💝</div>
+                <h3>고객 감동</h3>
+                <p>기대 이상의 경험을 드립니다</p>
+            </div>
+        </div>
     </section>
 
-    <!-- 혜택 섹션 -->
-    <section class="section benefits">
-        <h2>🎁 고객 혜택</h2>
-        <div class="content">{{ sections.benefits }}</div>
+    <!-- 차별점 섹션 -->
+    <section class="section usp">
+        <h2 class="section-title">이런 점이 달라요</h2>
+        <div class="usp-content">
+            <h3>{{ product_name }}을 선택해야 하는 이유</h3>
+            <p>{{ usp if usp else sections.benefits }}</p>
+        </div>
     </section>
 
-    <!-- 상세 정보 -->
-    <section class="section details">
-        <h2>📋 상세 정보</h2>
-        <div class="content">{{ sections.details }}</div>
+    <!-- 타겟 고객 섹션 -->
+    <section class="section target">
+        <h2 class="section-title">이런 분께 추천해요</h2>
+        <div class="target-box">
+            <h3>{{ target_customer }}를 위한 제품</h3>
+            <ul class="target-list">
+                <li>품질 좋은 제품을 찾으시는 분</li>
+                <li>믿을 수 있는 브랜드를 선호하시는 분</li>
+                <li>가성비와 품질 모두 중요하신 분</li>
+                <li>특별한 선물을 찾으시는 분</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 가격 섹션 -->
+    <section class="section pricing">
+        <h2 class="section-title">합리적인 가격</h2>
+        <div class="price-box">
+            <p class="price-label">특별 할인가</p>
+            <p class="price-amount">{{ price_info if price_info else '합리적인 가격' }}</p>
+            {% if price_info %}
+            <span class="price-promo">지금 구매하면 추가 혜택!</span>
+            {% endif %}
+        </div>
     </section>
 
     <!-- CTA 섹션 -->
-    <section class="section cta">
-        <h2>🛒 지금 바로 구매하세요!</h2>
-        <div class="content">{{ sections.cta }}</div>
+    <section class="cta">
+        <h2>지금 바로 만나보세요</h2>
+        <p>{{ sections.cta if sections.cta else '지금이 가장 좋은 기회입니다' }}</p>
+        <a href="#" class="cta-button">구매하기</a>
     </section>
 
-    <!-- 가격 정보 -->
-    {% if price_info %}
-    <section class="section price-info">
-        <div class="price">{{ price_info }}</div>
-    </section>
-    {% endif %}
+    <!-- 푸터 -->
+    <footer class="footer">
+        <p>상품 상세 정보는 판매자에게 문의해주세요</p>
+        <p style="margin-top: 8px;">Generated by 상세페이지 메이커</p>
+    </footer>
 </body>
 </html>

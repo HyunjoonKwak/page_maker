@@ -34,7 +34,8 @@ export function useNextQuestion(sessionId: number | null, enabled = true) {
         `/api/interview/sessions/${sessionId}/next-question`
       ),
     enabled: !!sessionId && enabled,
-    refetchOnMount: false,
+    staleTime: 0,  // 항상 새로운 데이터 fetch
+    refetchOnMount: true,
     refetchOnWindowFocus: false,
   });
 }

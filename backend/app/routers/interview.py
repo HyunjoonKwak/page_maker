@@ -52,8 +52,9 @@ INTERVIEW_FLOW = [
     },
     {
         "field_name": "product_images",
-        "question": "상품 이미지를 업로드해주세요",
+        "question": "상품 이미지를 업로드해주세요 (선택사항)",
         "input_type": "image_upload",
+        "optional": True,
     },
     {
         "field_name": "mood",

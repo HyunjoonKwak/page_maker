@@ -5,15 +5,17 @@ import { Button } from '@/components/ui/button';
 import { Upload, X, Image as ImageIcon, Check } from 'lucide-react';
 
 interface ImageUploadProps {
-  onUpload: (files: File[]) => void;
+  onUpload: (files: File[] | string) => void;
   maxFiles?: number;
   disabled?: boolean;
+  allowSkip?: boolean;
 }
 
 export function ImageUpload({
   onUpload,
   maxFiles = 5,
   disabled = false,
+  allowSkip = true,
 }: ImageUploadProps) {
   const [files, setFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
@@ -139,6 +141,18 @@ export function ImageUpload({
         >
           <Check className="mr-2 h-4 w-4" />
           {files.length}개 이미지 선택 완료
+        </Button>
+      )}
+
+      {/* 건너뛰기 버튼 */}
+      {allowSkip && files.length === 0 && (
+        <Button
+          onClick={() => onUpload('skip')}
+          disabled={disabled}
+          variant="outline"
+          className="w-full rounded-full"
+        >
+          건너뛰기
         </Button>
       )}
     </div>

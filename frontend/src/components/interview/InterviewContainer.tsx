@@ -1,14 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { useInterviewStore } from '@/store/interviewStore';
-import {
-  useCreateSession,
-  useNextQuestion,
-  useSubmitAnswer,
-} from '@/hooks/useInterview';
 import { ProgressBar } from './ProgressBar';
 import { ChatHistory } from './ChatHistory';
 import { TextInput } from './TextInput';
@@ -16,59 +10,37 @@ import { SelectInput } from './SelectInput';
 import { ImageUpload } from './ImageUpload';
 import { Button } from '@/components/ui/button';
 import { Loader2, ArrowRight, Sparkles } from 'lucide-react';
+import type { ChatMessage, QuestionResponse } from '@/lib/api/types';
+
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 export function InterviewContainer() {
   const router = useRouter();
-  const [isWaitingForQuestion, setIsWaitingForQuestion] = useState(false);
+  const [sessionId, setSessionId] = useState<number | null>(null);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [currentQuestion, setCurrentQuestion] = useState<QuestionResponse | null>(null);
+  const [status, setStatus] = useState<'idle' | 'loading' | 'in_progress' | 'completed' | 'error'>('idle');
+  const [progress, setProgress] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const [multiSelectValues, setMultiSelectValues] = useState<string[]>([]);
+  const totalSteps = 8;
 
-  const {
-    sessionId,
-    messages,
-    currentQuestion,
-    status,
-    progress,
-    totalSteps,
-    setSessionId,
-    addMessage,
-    setCurrentQuestion,
-    setStatus,
-    setProgress,
-    updateContext,
-    reset,
-  } = useInterviewStore();
+  // 메시지 추가
+  const addMessage = useCallback((message: Omit<ChatMessage, 'id' | 'timestamp'>) => {
+    setMessages(prev => [...prev, {
+      ...message,
+      id: `msg-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+      timestamp: new Date(),
+    }]);
+  }, []);
 
-  const createSession = useCreateSession();
-  const submitAnswer = useSubmitAnswer();
-  const { data: questionData, refetch: refetchQuestion } = useNextQuestion(
-    sessionId,
-    isWaitingForQuestion
-  );
+  // 다음 질문 가져오기
+  const fetchNextQuestion = useCallback(async (sid: number) => {
+    try {
+      const res = await fetch(`${API_BASE}/api/interview/sessions/${sid}/next-question`);
+      const data: QuestionResponse = await res.json();
 
-  // 세션 생성
-  useEffect(() => {
-    if (!sessionId && status === 'idle') {
-      setStatus('loading');
-      createSession.mutate(undefined, {
-        onSuccess: (data) => {
-          setSessionId(data.id);
-          setStatus('in_progress');
-          setIsWaitingForQuestion(true);
-        },
-        onError: (error) => {
-          toast.error('세션 생성에 실패했습니다.');
-          setStatus('error');
-        },
-      });
-    }
-  }, [sessionId, status]);
-
-  // 질문 수신
-  useEffect(() => {
-    if (questionData && isWaitingForQuestion) {
-      setIsWaitingForQuestion(false);
-
-      if (questionData.input_type === 'complete') {
+      if (data.input_type === 'complete') {
         setStatus('completed');
         addMessage({
           role: 'assistant',
@@ -77,61 +49,92 @@ export function InterviewContainer() {
         return;
       }
 
-      setCurrentQuestion(questionData);
+      setCurrentQuestion(data);
       addMessage({
         role: 'assistant',
-        content: questionData.question,
-        fieldName: questionData.field_name,
-        inputType: questionData.input_type,
-        options: questionData.options,
+        content: data.question,
+        fieldName: data.field_name,
+        inputType: data.input_type,
+        options: data.options,
       });
+    } catch (error) {
+      console.error('질문 로딩 실패:', error);
+      toast.error('질문을 불러오는데 실패했습니다.');
     }
-  }, [questionData, isWaitingForQuestion]);
+  }, [addMessage]);
+
+  // 세션 생성 및 첫 질문 로드
+  useEffect(() => {
+    if (status !== 'idle') return;
+
+    const initSession = async () => {
+      setStatus('loading');
+      try {
+        const res = await fetch(`${API_BASE}/api/interview/sessions`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({}),
+        });
+        const data = await res.json();
+        setSessionId(data.id);
+        setStatus('in_progress');
+        await fetchNextQuestion(data.id);
+      } catch (error) {
+        console.error('세션 생성 실패:', error);
+        toast.error('세션 생성에 실패했습니다.');
+        setStatus('error');
+      }
+    };
+
+    initSession();
+  }, [status, fetchNextQuestion]);
 
   // 답변 제출
   const handleAnswer = async (value: string | string[] | File[]) => {
     if (!sessionId || !currentQuestion) return;
 
-    // 파일 처리
     let processedValue = value;
-    if (Array.isArray(value) && value[0] instanceof File) {
-      // 이미지는 Base64로 변환 (간단한 구현)
+    let displayValue = '';
+
+    if (value === 'skip') {
+      processedValue = '';
+      displayValue = '건너뛰기';
+    } else if (Array.isArray(value) && value[0] instanceof File) {
       const fileNames = (value as File[]).map((f) => f.name);
       processedValue = fileNames.join(', ');
+      displayValue = processedValue as string;
       toast.info('이미지가 선택되었습니다.');
+    } else {
+      displayValue = Array.isArray(processedValue) ? processedValue.join(', ') : String(processedValue);
     }
 
     // 사용자 메시지 추가
     addMessage({
       role: 'user',
-      content: Array.isArray(processedValue)
-        ? processedValue.join(', ')
-        : String(processedValue),
+      content: displayValue,
     });
 
-    // 컨텍스트 업데이트
-    updateContext(currentQuestion.field_name, processedValue);
-    setProgress(progress + 1);
+    setProgress(prev => prev + 1);
     setCurrentQuestion(null);
     setMultiSelectValues([]);
+    setIsLoading(true);
 
-    // 답변 제출
-    submitAnswer.mutate(
-      {
-        sessionId,
-        fieldName: currentQuestion.field_name,
-        value: processedValue,
-      },
-      {
-        onSuccess: () => {
-          setIsWaitingForQuestion(true);
-          refetchQuestion();
-        },
-        onError: (error) => {
-          toast.error('답변 제출에 실패했습니다.');
-        },
-      }
-    );
+    try {
+      await fetch(`${API_BASE}/api/interview/sessions/${sessionId}/answer`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          field_name: currentQuestion.field_name,
+          value: processedValue,
+        }),
+      });
+      await fetchNextQuestion(sessionId);
+    } catch (error) {
+      console.error('답변 제출 실패:', error);
+      toast.error('답변 제출에 실패했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // 상세페이지 생성으로 이동
@@ -143,11 +146,15 @@ export function InterviewContainer() {
 
   // 다시 시작
   const handleReset = () => {
-    reset();
+    setSessionId(null);
+    setMessages([]);
+    setCurrentQuestion(null);
+    setStatus('idle');
+    setProgress(0);
   };
 
   // 로딩 중
-  if (status === 'loading' || (status === 'idle' && !sessionId)) {
+  if (status === 'loading') {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
         <div className="text-center">
@@ -162,12 +169,8 @@ export function InterviewContainer() {
     <div className="mx-auto max-w-2xl">
       {/* 헤더 */}
       <div className="mb-6 text-center">
-        <h1 className="mb-2 text-2xl font-bold text-gray-900">
-          상세페이지 만들기
-        </h1>
-        <p className="text-gray-600">
-          AI가 질문을 드릴게요. 편하게 답변해주세요.
-        </p>
+        <h1 className="mb-2 text-2xl font-bold text-gray-900">상세페이지 만들기</h1>
+        <p className="text-gray-600">AI가 질문을 드릴게요. 편하게 답변해주세요.</p>
       </div>
 
       {/* 진행률 */}
@@ -182,7 +185,7 @@ export function InterviewContainer() {
         </div>
 
         {/* 로딩 인디케이터 */}
-        {(submitAnswer.isPending || isWaitingForQuestion) && (
+        {isLoading && (
           <div className="mt-4 flex items-center gap-2 text-gray-500">
             <Loader2 className="h-4 w-4 animate-spin" />
             <span className="text-sm">AI가 생각하고 있어요...</span>
@@ -196,7 +199,7 @@ export function InterviewContainer() {
           {currentQuestion.input_type === 'text' && (
             <TextInput
               onSubmit={handleAnswer}
-              disabled={submitAnswer.isPending}
+              disabled={isLoading}
               placeholder="답변을 입력하세요..."
             />
           )}
@@ -205,27 +208,23 @@ export function InterviewContainer() {
             <SelectInput
               options={currentQuestion.options}
               onSelect={handleAnswer}
-              disabled={submitAnswer.isPending}
+              disabled={isLoading}
             />
           )}
 
-          {currentQuestion.input_type === 'multiselect' &&
-            currentQuestion.options && (
-              <SelectInput
-                options={currentQuestion.options}
-                onSelect={handleAnswer}
-                disabled={submitAnswer.isPending}
-                multiSelect
-                selectedValues={multiSelectValues}
-                onMultiSelect={setMultiSelectValues}
-              />
-            )}
+          {currentQuestion.input_type === 'multiselect' && currentQuestion.options && (
+            <SelectInput
+              options={currentQuestion.options}
+              onSelect={handleAnswer}
+              disabled={isLoading}
+              multiSelect
+              selectedValues={multiSelectValues}
+              onMultiSelect={setMultiSelectValues}
+            />
+          )}
 
           {currentQuestion.input_type === 'image_upload' && (
-            <ImageUpload
-              onUpload={handleAnswer}
-              disabled={submitAnswer.isPending}
-            />
+            <ImageUpload onUpload={handleAnswer} disabled={isLoading} />
           )}
         </div>
       )}
@@ -241,11 +240,7 @@ export function InterviewContainer() {
             상세페이지 생성하기
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
-          <Button
-            onClick={handleReset}
-            variant="outline"
-            className="w-full rounded-full"
-          >
+          <Button onClick={handleReset} variant="outline" className="w-full rounded-full">
             처음부터 다시 하기
           </Button>
         </div>

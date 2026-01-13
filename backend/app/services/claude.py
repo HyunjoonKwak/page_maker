@@ -12,6 +12,10 @@ client = anthropic.Anthropic(api_key=_api_key) if _api_key else None
 
 async def generate_followup_question(context: Dict[str, Any]) -> Optional[QuestionResponse]:
     """맥락 기반 후속 질문 생성"""
+    # API 키가 없으면 후속 질문 없이 완료 처리
+    if not client:
+        return None
+
     prompt = f"""
 현재까지 수집된 상품 정보:
 {context}
